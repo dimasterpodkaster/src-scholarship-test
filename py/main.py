@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from sparse_matrix import SparseMatrix
 import numpy as np
 
 from sparse_matrix import SparseMatrix
@@ -20,9 +20,15 @@ def check_power_2():
             continue
         print(f'Test {fname.name} ... ', end='')
         m = SparseMatrix(file=fname)
+        print(SparseMatrix.to_dense(m))
+        val, col, poin = SparseMatrix.to_massive(m)
+        print("Values", val)
+        print("Columns", col)
+        print("Pointers", poin)
         m_power_2 = m @ m
 
         answer = SparseMatrix(file=test_dir / f'{fname.stem}.out-2')
+        print(SparseMatrix.to_dense(m))
         err = compare(m_power_2, answer)
 
         if err < tolerance:

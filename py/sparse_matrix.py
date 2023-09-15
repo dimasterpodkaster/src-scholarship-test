@@ -56,18 +56,56 @@ class SparseMatrix:
                 A[i, element.index] = element.value
         return A
 
+
+    def to_massive(self):
+        n = len(self.data_)
+        values = []
+        cols = []
+        pointers = []
+        counter = 0
+        pointers.append(counter)
+        for i in range(n):
+            counter += len(self.data_[i])
+            pointers.append(counter)
+            for element in self.data_[i]:
+                if element != 0:
+                    values.append(element.value)
+                    cols.append(i)
+        return values, cols, pointers
+
+
+    def transpose_matrix(self):
+        # МОЖНО УЛУЧШИТЬ АЛГОРИТМ ДО ЛИНИИ
+        n = len(self.data_)
+        A_T = np.zeros((n, n), dtype=float)
+        for i in range(n):
+            for element in self.data_[i]:
+                A_T[element.index, i] = element.value
+        data_transpose = []
+        for i in range(n):
+            for j in range(n):
+                pass
+                # Вернуть формат в data_transpose
+        return data_transpose
+
+
     def __matmul__(self, other):
 
-        # vvvvv your code here vvvvv
+        # Реализовать транспонирование разреженной матрицы и применить его к матрице B.
+        Matrix_T = SparseMatrix.transpose_matrix(self)
+
+        # Инициализировать структуру данных для матрицы C, обеспечить возможность ее пополнения элементами.
+
+        # Последовательно перемножить каждую строку матрицы A на каждую из строк матрицы B^T, записывая в C полученные результаты и формируя ее структуру.
+
         result = SparseMatrix(dense=self.to_dense() @ other.to_dense())
-        # ^^^^^ your code here ^^^^^
 
         return result
 
     def __pow__(self, power, modulo=None):
 
-        # vvvvv your code here vvvvv
-        result = SparseMatrix(dense=np.linalg.matrix_power(self.to_dense(), power))
-        # ^^^^^ your code here ^^^^^
+        result = SparseMatrix.__matmul__(self, self)
+
+        # result = SparseMatrix(dense=np.linalg.matrix_power(self.to_dense(), power))
 
         return result
